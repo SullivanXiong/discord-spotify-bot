@@ -1,14 +1,14 @@
-# Discord Spotify Bot 🎵
+# Discord Spotify Bot
 
 A Discord bot that allows users to search and query music from Spotify using slash commands. Share music with friends in Discord!
 
 ## Features
 
-- 🎵 Search songs by name, artist, or album
-- 🔗 Get track information from Spotify URLs
-- ⚡ Fast slash command interface using `/play`
-- 📊 Display detailed track information including duration, popularity, and preview links
-- 🔄 Automatic Spotify API token management
+- Search songs by name, artist, or album
+- Get track information from Spotify URLs
+- Fast slash command interface using `/play`
+- Display detailed track information including duration, popularity, and preview links
+- Automatic Spotify API token management
 
 ## Commands
 
