@@ -74,6 +74,8 @@ sudo install -Dm755 ./librespot /usr/local/bin/librespot
 ```
 Or set `LIBRESPOT_PATH` in `.env` to point to your binary.
 
+6. Install avahi (required). On Linux, you can download a release binary. This is necessary for managing the librespot zero-conf networking
+
 ### 4. Running the Bot
 
 Start the bot:
