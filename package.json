@@ -1,0 +1,19 @@
+{
+  "name": "discord-spotify-bot",
+  "version": "1.0.0",
+  "description": "A Discord bot for querying and playing music from Spotify",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node index.js",
+    "test": "node test.js"
+  },
+  "keywords": ["discord", "spotify", "bot", "music"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^14.22.1",
+    "dotenv": "^17.2.2",
+    "spotify-web-api-node": "^5.0.2"
+  }
+}
