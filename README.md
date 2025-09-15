@@ -74,6 +74,8 @@ sudo install -Dm755 ./librespot /usr/local/bin/librespot
 ```
 Or set `LIBRESPOT_PATH` in `.env` to point to your binary.
 
+If audio sounds pitched or sped up, ensure resampling is correct. This bot treats librespot's pipe output as 44.1kHz and resamples to 48kHz for Discord. If you changed librespot's output rate, set `LIBRESPOT_SAMPLE_RATE` accordingly.
+
 6. Install avahi (required). On Linux, you can download a release binary. This is necessary for managing the librespot zero-conf networking
 
 ### 4. Running the Bot
