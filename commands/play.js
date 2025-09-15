@@ -1,6 +1,6 @@
-import { SlashCommandBuilder } from "discord.js";
+const { SlashCommandBuilder } = require("discord.js");
 
-export function initializePlayCommand() {
+function initializePlayCommand() {
 	return {
 		data: new SlashCommandBuilder()
 			 .setName('play')
@@ -30,5 +30,7 @@ export function initializePlayCommand() {
 				  await interaction.editReply('Sorry, there was an error processing your request. Please try again.');
 			 }
 		}
-	}
+	};
 }
+
+module.exports = { initializePlayCommand };
