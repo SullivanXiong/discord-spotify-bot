@@ -1,14 +1,14 @@
-# Discord Spotify Bot
+# Discord Spotify Connect to Discord Bot
 
-A Discord bot that allows users to search and query music from Spotify using slash commands. Share music with friends in Discord!
+A Discord bot that emulates a Spotify Connect device (via librespot) and streams that audio into a Discord voice channel. Includes `/device start` to expose a Connect device, and `/join`/`/leave` to manage voice. Also supports `/play` to search Spotify metadata.
 
 ## Features
 
-- Search songs by name, artist, or album
-- Get track information from Spotify URLs
-- Fast slash command interface using `/play`
-- Display detailed track information including duration, popularity, and preview links
-- Automatic Spotify API token management
+- **Spotify Connect device**: Uses librespot with pipe backend to output raw PCM
+- **Audio pipeline to Discord**: ffmpeg encodes PCM to Ogg/Opus for Discord voice
+- **Slash commands**: `/join`, `/leave`, `/device start|stop|status`, `/play`
+- **Spotify search**: Metadata search and track info via Spotify Web API
+- **Token management**: Automatic Spotify Client Credentials token refresh
 
 ## Commands
 
@@ -68,6 +68,16 @@ SPOTIFY_CLIENT_ID=your_spotify_client_id_here
 SPOTIFY_CLIENT_SECRET=your_spotify_client_secret_here
 ```
 
+5. Install librespot (required). On Linux, you can download a release binary:
+```bash
+sudo install -Dm755 ./librespot /usr/local/bin/librespot
+```
+Or set `LIBRESPOT_PATH` in `.env` to point to your binary.
+
+If audio sounds pitched or sped up, ensure resampling is correct. This bot treats librespot's pipe output as 44.1kHz and resamples to 48kHz for Discord. If you changed librespot's output rate, set `LIBRESPOT_SAMPLE_RATE` accordingly.
+
+6. Install avahi (required). On Linux, you can download a release binary. This is necessary for managing the librespot zero-conf networking
+
 ### 4. Running the Bot
 
 Start the bot:
@@ -80,7 +90,13 @@ For development with auto-restart:
 npm run dev
 ```
 
-## Usage Examples
+## Usage
+
+1. In a Discord server, run:
+   - `/join` to have the bot join your voice channel
+   - `/device start` to start the Spotify Connect device
+2. Open Spotify on your phone/desktop, select device "Discord Connect" (or your `LIBRESPOT_DEVICE_NAME`) and press Play.
+3. Use `/device status` to check state, `/device stop` to stop, `/leave` to disconnect.
 
 ### Search by song name:
 ```
@@ -101,7 +117,10 @@ npm run dev
 
 ```
 discord-spotify-bot/
-├── index.js           # Main bot file with Discord and Spotify integration
+├── index.js           # Main bot file and command wiring
+├── lib/
+│  ├── librespot.js    # Wrapper to run librespot with pipe backend -> FIFO
+│  └── voice.js        # Voice connect and ffmpeg encode to Discord
 ├── package.json       # Node.js dependencies and scripts
 ├── .env.example       # Environment variables template
 ├── .gitignore        # Git ignore file

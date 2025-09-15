@@ -1,6 +1,8 @@
 const { Client, GatewayIntentBits, Collection, REST, Routes } = require('discord.js');
 const SpotifyWebApi = require('spotify-web-api-node');
-const { initializePlayCommand } = require('./commands/index.js');
+const commandsIndex = require('./commands/index.js');
+const { LibrespotController } = require('./lib/librespot.js');
+const { VoiceController } = require('./lib/voice.js');
 require('dotenv').config();
 
 class DiscordSpotifyBot {
@@ -20,15 +22,30 @@ class DiscordSpotifyBot {
         });
 
         this.commands = new Collection();
+        this.librespot = new LibrespotController({
+            deviceName: process.env.LIBRESPOT_DEVICE_NAME,
+            fifoPath: process.env.LIBRESPOT_FIFO_PATH,
+            librespotPath: process.env.LIBRESPOT_PATH
+        });
+        this.voice = new VoiceController({
+            onDebugLog: (msg) => console.log(msg)
+        });
         this.initializeCommands();
         this.setupEventHandlers();
     }
 
     initializeCommands() {
-        // Register the /play command
-        const playCommand = initializePlayCommand();
+        const builders = [
+            commandsIndex.initializePlayCommand,
+            commandsIndex.initializeJoinCommand,
+            commandsIndex.initializeLeaveCommand,
+            commandsIndex.initializeDeviceCommand
+        ].filter(Boolean);
 
-        this.commands.set(playCommand.data.name, playCommand);
+        for (const builder of builders) {
+            const cmd = builder();
+            this.commands.set(cmd.data.name, cmd);
+        }
     }
 
     setupEventHandlers() {
@@ -188,10 +205,7 @@ class DiscordSpotifyBot {
             process.exit(1);
         }
 
-        if (!process.env.SPOTIFY_CLIENT_ID || !process.env.SPOTIFY_CLIENT_SECRET) {
-            console.error('Spotify credentials are not set in environment variables');
-            process.exit(1);
-        }
+        // Spotify search uses client credentials, but librespot does not require them here.
 
         try {
             await this.client.login(process.env.DISCORD_TOKEN);
